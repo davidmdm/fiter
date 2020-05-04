@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge, find } = require('../src/index');
+const { concat, filter, map, merge, find, flatMap } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
@@ -139,6 +139,53 @@ describe('map', () => {
     assert.ok(iter[Symbol.iterator] === undefined);
     assert.ok(iter[Symbol.asyncIterator]);
     assert.deepEqual(await toArray(iter), [2, 4, 6]);
+  });
+});
+
+describe('flatMap', () => {
+  it('should be the same as a map if mapFn does not return iterables', async () => {
+    const iter = flatMap([1, 2, 3], x => 2 * x);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [2, 4, 6]);
+  });
+
+  it('should flatten mapped iterables', async () => {
+    const iter = flatMap([1, 2, 3], x => [2 * x]);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [2, 4, 6]);
+  });
+
+  it('should be the same as a map if mapFn does not return iterables - async', async () => {
+    const i = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
+    const iter = flatMap(i, x => 2 * x);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [2, 4, 6]);
+  });
+
+  it('should flatten mapped iterables - async', async () => {
+    const asReadable = x => {
+      const r = new stream.Readable({ objectMode: true });
+      r.push(x);
+      r.push(null);
+      return r;
+    };
+
+    const i = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
+    const iter = flatMap(i, x => asReadable(x));
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [1, 2, 3]);
   });
 });
 
