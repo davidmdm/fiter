@@ -1,9 +1,12 @@
+src
 test
 coverage
 .nyc_output
 .vscode
-.tsconfig.json
 .prettierrc.json
-src
+
+
+tsconfig.json
+jsconfig.json
 
 benchmarks.json

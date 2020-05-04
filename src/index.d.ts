@@ -4,6 +4,9 @@ export declare function map<T, K>(it: AsyncIterable<T>, fn: (value: T) => K): As
 export declare function filter<T>(it: Iterable<T>, fn: (value: T) => any): Iterable<T>;
 export declare function filter<T>(it: AsyncIterable<T>, fn: (value: T) => any): AsyncIterable<T>;
 
+export declare function find<T>(it: Iterable<T>, fn: (value: T) => any): T | undefined;
+export declare function find<T>(it: AsyncIterable<T>, fn: (value: T) => any): Promise<T | undefined>;
+
 type Iter = Iterable<any> | AsyncIterable<any>;
 type IsAsyncIterResultType<T extends Iter[]> = {
   [key in keyof T]: T[key] extends { [Symbol.asyncIterator]: () => any } ? true : never;

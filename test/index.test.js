@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge } = require('../src/index');
+const { concat, filter, map, merge, find } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
@@ -194,5 +194,48 @@ describe('merge', () => {
 
     const iter = merge(readable);
     await assert.rejects(toArray(iter), { message: 'Test Error' });
+  });
+});
+
+describe('find', () => {
+  it('should return a found value - array', () => {
+    const value = find([1, 2, 3], x => x > 1);
+    assert.equal(value, 2);
+  });
+
+  it('should return a found value - generator', () => {
+    const i = (function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
+    const value = find(i, x => x > 1);
+    assert.equal(value, 2);
+  });
+
+  it('should return undefined if value not found', () => {
+    const value = find([1, 3, 5], x => x % 2 === 0);
+    assert.equal(value, undefined);
+  });
+
+  it('should return the promise of a found value when async iterable', async () => {
+    const i = (async function* () {
+      yield 1;
+      yield 2;
+    })();
+    const value = find(i, x => x > 1);
+    assert.ok(value instanceof Promise);
+    assert.equal(await value, 2);
+  });
+
+  it('should return the promise of undefined when async iterable and value not found', async () => {
+    const i = (async function* () {
+      yield 1;
+      yield 3;
+      yield 5;
+    })();
+    const value = find(i, x => x % 2 === 0);
+    assert.ok(value instanceof Promise);
+    assert.equal(await value, undefined);
   });
 });

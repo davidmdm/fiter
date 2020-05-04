@@ -80,9 +80,33 @@ function merge(...iterators) {
   return passthrough[Symbol.asyncIterator]();
 }
 
+function syncfind(it, fn) {
+  for (const value of it) {
+    if (fn(value)) {
+      return value;
+    }
+  }
+}
+
+async function asyncfind(it, fn) {
+  for await (const value of it) {
+    if (fn(value)) {
+      return value;
+    }
+  }
+}
+
+function find(it, fn) {
+  if (it[Symbol.asyncIterator]) {
+    return asyncfind(it, fn);
+  }
+  return syncfind(it, fn);
+}
+
 module.exports = {
   map,
   filter,
   concat,
   merge,
+  find,
 };
