@@ -1,6 +1,14 @@
 export declare function map<T, K>(it: Iterable<T>, fn: (value: T) => K): Iterable<K>;
 export declare function map<T, K>(it: AsyncIterable<T>, fn: (value: T) => K): AsyncIterable<K>;
 
+export declare function flat<T>(
+  it: Iterable<T> | AsyncIterable<T>
+): T extends Iterable<infer K>
+  ? AsyncIterable<K>
+  : T extends AsyncIterable<infer K>
+  ? AsyncIterable<K>
+  : AsyncIterable<T>;
+
 export declare function flatMap<T, K>(
   it: Iterable<T> | AsyncIterable<T>,
   fn: (value: T) => K

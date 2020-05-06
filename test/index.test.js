@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge, find, flatMap } = require('../src/index');
+const { concat, filter, map, merge, find, flatMap, flat } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
@@ -186,6 +186,47 @@ describe('flatMap', () => {
     assert.equal(iter[Symbol.iterator], undefined);
     assert.ok(iter[Symbol.asyncIterator]);
     assert.deepEqual(await toArray(iter), [1, 2, 3]);
+  });
+});
+
+describe('flat', () => {
+  async function* asyncRange(start, end) {
+    while (start < end) {
+      yield start++;
+    }
+  }
+
+  it('should flatten iterable values inside iterable', async () => {
+    const iter = flat([[1, 2], [3], 4]);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [1, 2, 3, 4]);
+  });
+
+  it('should flatten async iterable values inside iterable', async () => {
+    const iter = flat([asyncRange(1, 3), asyncRange(3, 5)]);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [1, 2, 3, 4]);
+  });
+
+  it('should flatten mix of async/synchronous iterables in iterable', async () => {
+    const iter = flat([asyncRange(1, 3), [3], 4]);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [1, 2, 3, 4]);
+  });
+
+  it('should flatten async iterable of iterables', async () => {
+    const i = (async function* () {
+      yield asyncRange(1, 3);
+      yield [3];
+      yield 4;
+    })();
+    const iter = flat(i);
+    assert.equal(iter[Symbol.iterator], undefined);
+    assert.ok(iter[Symbol.asyncIterator]);
+    assert.deepEqual(await toArray(iter), [1, 2, 3, 4]);
   });
 });
 

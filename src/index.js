@@ -44,17 +44,20 @@ function map(it, fn) {
   return syncMap(it, fn);
 }
 
-async function* flatMap(it, fn) {
+async function* flat(it) {
   for await (const value of it) {
-    const mapped = fn(value);
-    if (mapped[Symbol.asyncIterator]) {
-      yield* mapped[Symbol.asyncIterator]();
-    } else if (mapped[Symbol.iterator]) {
-      yield* mapped[Symbol.iterator]();
+    if (value[Symbol.asyncIterator]) {
+      yield* value[Symbol.asyncIterator]();
+    } else if (value[Symbol.iterator]) {
+      yield* value[Symbol.iterator]();
     } else {
-      yield mapped;
+      yield value;
     }
   }
+}
+
+function flatMap(it, fn) {
+  return flat(map(it, fn));
 }
 
 function* syncConcat(...iterators) {
@@ -123,4 +126,5 @@ module.exports = {
   merge,
   find,
   flatMap,
+  flat,
 };
