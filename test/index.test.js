@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge, find, flatMap, flat } = require('../src/index');
+const { concat, filter, map, merge, find, flatMap, flat, reduce } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
@@ -325,5 +325,51 @@ describe('find', () => {
     const value = find(i, x => x % 2 === 0);
     assert.ok(value instanceof Promise);
     assert.equal(await value, undefined);
+  });
+});
+
+describe('reduce', () => {
+  it('should reduce an iterable - array', () => {
+    const result = reduce([1, 2, 3], (acc, val) => acc + val, 0);
+    assert.equal(result, 6);
+  });
+
+  it('should use the first item as initial acc if none provided', () => {
+    const result = reduce([1, 2, 3], (acc, val) => acc + val);
+    assert.equal(result, 6);
+  });
+
+  it('should reduce an iterable - generator', () => {
+    const iter = (function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
+    const result = reduce(iter, (acc, val) => acc + val, 0);
+    assert.equal(result, 6);
+  });
+
+  it('should reduce an async iterable - readable stream', async () => {
+    const r = new stream.Readable({ objectMode: true });
+    r.push(1);
+    r.push(2);
+    r.push(3);
+    r.push(null);
+
+    const result = reduce(r, (acc, value) => acc + value, 0);
+    assert.ok(result instanceof Promise);
+    assert.equal(await result, 6);
+  });
+
+  it('should reduce an async iterable and use first element as initial acc - readable stream', async () => {
+    const r = new stream.Readable({ objectMode: true });
+    r.push(1);
+    r.push(2);
+    r.push(3);
+    r.push(null);
+
+    const result = reduce(r, (acc, value) => acc + value);
+    assert.ok(result instanceof Promise);
+    assert.equal(await result, 6);
   });
 });

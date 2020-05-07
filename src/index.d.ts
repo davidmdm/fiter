@@ -24,6 +24,15 @@ export declare function filter<T>(it: AsyncIterable<T>, fn: (value: T) => any): 
 export declare function find<T>(it: Iterable<T>, fn: (value: T) => any): T | undefined;
 export declare function find<T>(it: AsyncIterable<T>, fn: (value: T) => any): Promise<T | undefined>;
 
+export declare function reduce<T, K>(it: Iterable<T>, fn: (acc: T | undefined, value: T) => T): T | undefined;
+export declare function reduce<T, K>(it: Iterable<T>, fn: (acc: K, value: T) => K, initialAcc: K): K;
+export declare function reduce<T, K>(it: AsyncIterable<T>, fn: (acc: T, value: T) => T): Promise<T | undefined>;
+export declare function reduce<T, K>(
+  it: AsyncIterable<T>,
+  fn: (acc: K, value: T) => K,
+  initialAcc: K
+): K extends Promise<any> ? K : Promise<K>;
+
 type Iter = Iterable<any> | AsyncIterable<any>;
 type IsAsyncIterResultType<T extends Iter[]> = {
   [key in keyof T]: T[key] extends { [Symbol.asyncIterator]: () => any } ? true : never;

@@ -119,12 +119,48 @@ function find(it, fn) {
   return syncfind(it, fn);
 }
 
+function syncReduce(iter, fn, acc) {
+  if (acc === undefined) {
+    const { value, done } = iter.next();
+    if (done) {
+      return value;
+    }
+    acc = value;
+  }
+  for (const value of iter) {
+    acc = fn(acc, value);
+  }
+  return acc;
+}
+
+async function asyncReduce(iter, fn, acc) {
+  if (acc === undefined) {
+    const { value, done } = await iter.next();
+    if (done) {
+      return value;
+    }
+    acc = value;
+  }
+  for await (const value of iter) {
+    acc = fn(acc, value);
+  }
+  return acc;
+}
+
+function reduce(iter, fn, acc) {
+  if (iter[Symbol.asyncIterator]) {
+    return asyncReduce(iter[Symbol.asyncIterator](), fn, acc);
+  }
+  return syncReduce(iter[Symbol.iterator](), fn, acc);
+}
+
 module.exports = {
   map,
   filter,
   concat,
   merge,
   find,
+  reduce,
   flatMap,
   flat,
 };

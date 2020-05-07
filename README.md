@@ -69,6 +69,15 @@ Should your iterables map onto more iterables you can flat map them to flatten t
 const iter = flatMap(['file.txt', 'next.txt'], file => fs.createReadableStream(file));
 ```
 
+### reduce
+
+Analagous to the `Array.prototype.reduce` method, fiter provides its own reduce that works on any sync/async iterable value. If the iterable is synchronous the value is returned synchronously. If the iterable is async a Promise of the value is returned.
+
+```javascript
+const file = fs.createReadStream('./somefilepath.txt');
+const lines = await reduce(file, (acc, value) => acc + countNewLineCharacters(chunk), 0);
+```
+
 ### find
 
 Analagous to `Array.prototype.find`, will return first element to match predicate function otherwise undefined.
