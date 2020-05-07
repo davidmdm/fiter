@@ -1,7 +1,5 @@
 # Fiter
 
-## Iterable utils
-
 This package provides barebone utilities for working with (sync and async) iterators and iterable values in nodejs.
 
 More specifically it provides the highorder filter, map and find functions, as well as, concat and merge utilities.
