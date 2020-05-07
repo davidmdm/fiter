@@ -1,11 +1,12 @@
 {
   "name": "fiter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
   "scripts": {
-    "test": "nyc mocha \"./test/**/*.test.js\""
+    "test": "nyc mocha \"./test/**/*.test.js\"",
+    "pub": "npm t && npm publish"
   },
   "author": "",
   "license": "ISC",

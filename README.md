@@ -1,4 +1,6 @@
-# Iterable Utils
+# Fiter
+
+## Iterable utils
 
 This package provides barebone utilities for working with (sync and async) iterators and iterable values in nodejs.
 
