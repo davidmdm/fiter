@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge, find, flatMap, flat, reduce } = require('../src/index');
+const { concat, filter, map, merge, find, flatMap, flat, reduce, range } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
@@ -20,6 +20,16 @@ async function toArray(it) {
   }
   return result;
 }
+
+describe('range', () => {
+  it('should return an iterator over a range', () => {
+    assert.deepEqual(Array.from(range(0, 5)), [0, 1, 2, 3, 4]);
+  });
+
+  it('should return no list if start is equal to end', () => {
+    assert.deepEqual(Array.from(range(1, 1)), []);
+  });
+});
 
 describe('concat', () => {
   it('should concat sync iterables together and return a new sync iterable', () => {

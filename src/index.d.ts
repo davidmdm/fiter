@@ -1,3 +1,5 @@
+export declare function range(start: number, end: number): Iterable<number>;
+
 export declare function map<T, K>(it: Iterable<T>, fn: (value: T) => K): Iterable<K>;
 export declare function map<T, K>(it: AsyncIterable<T>, fn: (value: T) => K): AsyncIterable<K>;
 

@@ -154,6 +154,13 @@ function reduce(iter, fn, acc) {
   return syncReduce(iter[Symbol.iterator](), fn, acc);
 }
 
+function* range(start, end) {
+  let curr = Math.floor(start);
+  while (curr < end) {
+    yield curr++;
+  }
+}
+
 module.exports = {
   map,
   filter,
@@ -163,4 +170,5 @@ module.exports = {
   reduce,
   flatMap,
   flat,
+  range,
 };
