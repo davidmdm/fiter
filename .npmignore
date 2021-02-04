@@ -8,4 +8,5 @@ coverage
 tsconfig.json
 jsconfig.json
 
+**/*.benchmark.js
 benchmarks.json
