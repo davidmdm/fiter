@@ -161,6 +161,10 @@ function* range(start, end) {
   }
 }
 
+function pipe(...fn) {
+  return it => fn.reduce((acc, f) => f(acc), it);
+}
+
 module.exports = {
   map,
   filter,
@@ -171,4 +175,5 @@ module.exports = {
   flatMap,
   flat,
   range,
+  pipe,
 };

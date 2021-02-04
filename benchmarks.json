@@ -1,0 +1,22 @@
+{
+  "map": {
+    "array baseline": {
+      "ratio": 1,
+      "elapsed": 984,
+      "iterationsPerSecond": 1016260,
+      "bestIterationsPerSecond": 1016260,
+      "bestElapsed": 984,
+      "passed": true,
+      "error": null
+    },
+    "iterable map": {
+      "ratio": 0.977,
+      "elapsed": 167,
+      "iterationsPerSecond": 5988023,
+      "bestIterationsPerSecond": 5988023,
+      "bestElapsed": 167,
+      "passed": true,
+      "error": null
+    }
+  }
+}

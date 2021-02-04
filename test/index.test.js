@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const stream = require('stream');
-const { concat, filter, map, merge, find, flatMap, flat, reduce, range } = require('../src/index');
+const { concat, filter, map, merge, find, flatMap, flat, reduce, range, pipe } = require('../src/index');
 
 async function* asyncGen() {
   yield 1;
