@@ -25,7 +25,7 @@
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.13.5",
     "benchmonkey": "0.0.7",
-    "mocha": "^7.1.2",
+    "mocha": "^10.2.0",
     "nyc": "^15.0.1"
   },
   "nyc": {
